@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <link href="./styles.css" rel="stylesheet">
+  <title>PDF GALLERY</title>
+</head>
+
+<body>
+  <div id="SuccessRename" hidden= true><b id="TextAlert">Successfully renamed!</b></div>
+  <div id="mainDIV" >
+    <button class = "Main" id="PREV">←</button>
+    <input class ="Rename" id="DirectoryInput" placeholder="Set new name" hidden="true">
+    <button class ="Rename" id="OK_ChangeName" hidden="true">Save</button>
+    <button class ="Rename" id="Cancel_ChangeName" hidden="true">Cancel</button>
+    <button class = "Main" id="NEXT">→</button>
+    <button class = "Main" id="delete">DELETE</button>
+    <button class = "Main" id="rename">RENAME</button>
+
+
+
+    <div class="arrow">
+      <div class="arrow-top"></div>
+      <div class="arrow-bottom"></div>
+    </div>
+    
+    
+    <!-- <input id="ChooseFolder" type="file" webkitdirectory placeholder="Select folder" > -->
+  </div>
+  <p>
+    <embed id="displayPDF" src="./dummy.pdf" width="100%" height="1200px" />
+  </p>
+  <!-- You can also require other files to run in this process -->
+  <script src="./renderer.js"></script>
+
+
+  
+</body>
+
+</html>

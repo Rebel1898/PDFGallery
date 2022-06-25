@@ -1,0 +1,56 @@
+/* styles.css */
+
+/* Add styles here to customize the appearance of your app */
+
+button {
+    padding: 5px 15px;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #04aa9c;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 9px #999;
+}
+
+button:hover {
+    background-color: #3e758e
+}
+
+button:active {
+    background-color: #3e6d8e;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+body {
+    background-color: #323639;
+}
+
+input {
+    width: 300px;
+    padding: 5px 15px;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 9px #999;
+}
+
+#SuccessRename {
+    float: right;
+    background-color: rgb(17, 213, 17);
+    border-color: black;
+    margin-right: 15px;
+}
+
+#mainDIV {
+    /* display: inline-block; */
+    display: block;
+    margin-left: 40%;
+}
