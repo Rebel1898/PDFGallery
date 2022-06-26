@@ -179,10 +179,10 @@ function CargarAnterior() {
 }
 
 const { ipcRenderer } = require('electron');
-
 ipcRenderer.on('LeerArchivos', (event, arg, ind) => {
     array = arg;
     index = ind;
     document.getElementById("displayPDF").src = array[index];
 });
+ipcRenderer.send('LeerArchivos', null);
 
