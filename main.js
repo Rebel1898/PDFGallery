@@ -6,7 +6,6 @@ const { ipcMain } = require('electron');
 ipcMain.on("LeerArchivos", (event, arg) => {
   var archivo = process.argv[process.argv.length - 1]
   var testFolder = require('path').dirname(archivo);
-
   const fs = require('fs');
   var array = [];
   index = 0;
@@ -22,8 +21,6 @@ ipcMain.on("LeerArchivos", (event, arg) => {
     }
   }
   )
-
-
   event.sender.send('LeerArchivos', array, index);
 });
 
@@ -41,7 +38,9 @@ function createWindow() {
     }
   })
   mainWindow.loadFile('index.html')
-  mainWindow.maximize()
+  mainWindow.maximize();
+  // mainWindow.webContents.openDevTools();
+  
 }
 
 app.whenReady().then(() => {
