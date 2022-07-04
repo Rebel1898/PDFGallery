@@ -28,6 +28,9 @@ document.addEventListener("keydown", function (event) {
     if (event.defaultPrevented) {
         return;
     }
+    if ((event.keyCode == 70 && (event.ctrlKey || event.metaKey))) {
+        alert("prueba");
+    }
     if (document.getElementById("DirectoryInput").hidden) {
         switch (event.key) {
             case "Right": CargarSiguiente();
@@ -41,8 +44,6 @@ document.addEventListener("keydown", function (event) {
 
             case "ArrowLeft": CargarAnterior();
                 break;
-
-
             default:
                 return;
         }
@@ -58,7 +59,9 @@ document.addEventListener("keydown", function (event) {
     }
 }, true);
 
-
+function SetTitle(texto){
+    document.title=  texto + "  -  PDF gallery " ;
+}
 function PrepareRename(encendido) {
     var directoryPath = require('path').dirname(array[index])
     document.getElementById("DirectoryInput").value = array[index].replace(directoryPath + "\\", "");
@@ -99,7 +102,6 @@ function SetRename() {
             if (err) {
                 alert("An error ocurred updating the file" + err.message);
                 document.getElementById("DirectoryInput").focus();
-
             }
             else {
                 array[index] = directoryPath + newName;
@@ -107,7 +109,6 @@ function SetRename() {
                 message("Successfully renamed!", 1500);
             }
             PrepareRename(false);
-
         });
     }
 }
@@ -124,37 +125,44 @@ function message(texto, Timeout) {
 function Borrar(filepath) {
     var fs = require('fs');
 
-    if (fs.existsSync(filepath)) {
-        fs.unlink(filepath, (err) => {
-            if (err) {
-                alert("An error ocurred updating the file" + err.message);
-                return;
-            }
-            array.splice(index, 1);
-            message("Successfully deleted!", 1500);
-            CargarSiguiente();
+    if (confirm("Are you sure you want to delete this PDF?")) {
 
-        });
-    } else {
-        alert("This file doesn't exist, cannot delete");
+        if (fs.existsSync(filepath)) {
+            fs.unlink(filepath, (err) => {
+                if (err) {
+                    alert("An error ocurred updating the file" + err.message);
+                    return;
+                }
+                array.splice(index, 1);
+                message("Successfully deleted!", 1500);
+                CargarSiguiente();
+
+            });
+        } else {
+            alert("This file doesn't exist, cannot delete");
+        }
     }
+    else{
+    };
 }
 function CargarSiguiente() {
     var fs = require('fs');
     if (index < array.length - 1) {
-        index = index+1;
+        index = index + 1;
     }
     else {
         index = 0;
     }
 
-    if (!fs.existsSync(array[index])){
+    if (!fs.existsSync(array[index])) {
         array.splice(index, 1);
         CargarSiguiente();
     }
-    
+
     if (array.length != 1) {
         document.getElementById("displayPDF").src = array[index];
+        var filename = array[index].split("\\");
+        SetTitle(filename[filename.length -1]);
     }
 }
 
@@ -166,23 +174,28 @@ function CargarAnterior() {
     else {
         index = array.length - 1;
     }
-    
-    if (!fs.existsSync(array[index])){
+
+    if (!fs.existsSync(array[index])) {
         array.splice(index, 1);
         CargarAnterior();
     }
-    if (array.length != 1)
-    document.getElementById("displayPDF").src = array[index];
+    if (array.length != 1){
+        document.getElementById("displayPDF").src = array[index];
+        var filename = array[index].split("\\");
+        SetTitle(filename[filename.length -1]);
+    }
 
 
 
 }
+
 
 const { ipcRenderer } = require('electron');
 ipcRenderer.on('LeerArchivos', (event, arg, ind) => {
     array = arg;
     index = ind;
     document.getElementById("displayPDF").src = array[index];
+    var filename = array[index].split("\\");
+    SetTitle(filename[filename.length -1]);
 });
 ipcRenderer.send('LeerArchivos', null);
-
