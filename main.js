@@ -29,6 +29,7 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1024,
     height: 600,
+    icon: __dirname + '/PDF_icon4.png',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: false,
@@ -39,8 +40,6 @@ function createWindow() {
   })
   mainWindow.loadFile('index.html')
   mainWindow.maximize();
-  // mainWindow.webContents.openDevTools();
-  
 }
 
 app.whenReady().then(() => {
