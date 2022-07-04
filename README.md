@@ -4,7 +4,7 @@ The release with the exe file can be downloaded from here:
 https://github.com/Rebel1898/PDFGallery/blob/main/Release/PDFGallery-win32-x64.zip
 
 
-In order to use it, just right click on the file and select "Open with PDFgallery"
+In order to use it, just right click on the file and select "Open with PDFgallery" (open with the exe present in the zip file)
 
 ![imagen](https://user-images.githubusercontent.com/44053413/177223238-87d95ad8-55d0-4b3d-ae3c-665ffca6234c.png)
 
