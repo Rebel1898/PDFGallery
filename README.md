@@ -8,7 +8,7 @@ In order to use it, just right click on the file and select "Open with PDFgaller
 
 ![imagen](https://user-images.githubusercontent.com/44053413/177223238-87d95ad8-55d0-4b3d-ae3c-665ffca6234c.png)
 
-Once it is opened, you can browse right or left to view other PDFs in the same directory, click rename to change the file name or delete it.
+Once it is opened, you can browse right or left to view other PDFs in the same directory, click rename to change the file name save a copy or delete it.
 
 ![imagen](https://user-images.githubusercontent.com/44053413/177223474-6a21dc93-ad88-455e-97b1-751f8abf99f6.png)
 
