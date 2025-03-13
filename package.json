@@ -1,12 +1,14 @@
 {
   "name": "pdf-gallery",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A minimal PDF gallery",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/Rebel1898/PDFGallery",
   "keywords": [
     "Electron",
     "pdf",
@@ -14,17 +16,59 @@
     "viewer",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "Rebel1898",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^19.0.6",
-    "electron-packager": "^15.5.1"
-  },
-  "fileAssociations": {
-    "ext": ".PDF"
+    "electron": "^35.0.1",
+    "electron-builder": "^25.1.8",
+    "electron-packager": "^17.1.2"
   },
   "dependencies": {
     "electron-prompt": "^1.7.0",
     "smalltalk": "^4.0.7"
+  },
+  "build": {
+    "appId": "com.electron.pdf-gallery",
+    "asar": true,
+    "fileAssociations": [
+      {
+        "ext": ".PDF",
+        "name": "PDF Files"
+      }
+    ],
+    "productName": "pdf-gallery",
+    "files": [
+      "node_modules/**/*",
+      "src/**/*",
+      "package.json",
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "styles.css",
+      "PDF_icon4.png"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "icon.ico"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "icon.icns"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "icon.png"
+    }
   }
 }

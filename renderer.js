@@ -12,6 +12,12 @@ document.querySelector('#delete').addEventListener('click', () => {
     Borrar(array[index]);
 
 })
+document.querySelector('#move').addEventListener('click', () => {
+    MoveFile([array[index]])
+
+})
+
+
 document.querySelector('#rename').addEventListener('click', () => {
     PrepareRename(true);
 
@@ -24,6 +30,10 @@ document.querySelector('#OK_ChangeName').addEventListener('click', () => {
     SetRename();
 
 })
+
+
+
+
 document.addEventListener("keydown", function (event) {
     if (event.defaultPrevented) {
         return;
@@ -63,8 +73,9 @@ function SetTitle(texto){
     document.title=  texto + "  -  PDF gallery " ;
 }
 function PrepareRename(encendido) {
-    var directoryPath = require('path').dirname(array[index])
-    document.getElementById("DirectoryInput").value = array[index].replace(directoryPath + "\\", "");
+    var directoryPath = window.electronAPI.path.dirname(array[index]);
+    document.getElementById("DirectoryInput").value = window.electronAPI.path.basename(array[index]);
+    
 
     var elementosinvisibles = document.getElementsByClassName("Rename");
     for (i = 0; i < elementosinvisibles.length; i++) {
@@ -81,35 +92,35 @@ function PrepareRename(encendido) {
     }
 }
 function SetRename() {
-    var fs = require('fs');
 
-    var directoryPath = require('path').dirname(array[index])
+    var directoryPath = window.electronAPI.path.dirname(array[index])
     var newName = document.getElementById("DirectoryInput").value;
+    if (newName == "") newName =     document.getElementById("DirectoryInput").value = window.electronAPI.path.basename(array[index]);
 
-    if (newName == "") newName = array[index].replace(directoryPath + "\\", "");
 
     if (newName.toUpperCase().endsWith(".PDF") == false) { newName = newName + ".pdf"; }
-
-
-    if (fs.existsSync(directoryPath + "\\" + newName)) {
-        alert("The filename is already used");
+    var nuevaRuta = window.electronAPI.path.join(directoryPath,newName)
+    if (window.electronAPI.fileExists(nuevaRuta)) {
+        alert("The filename is already being used.");
         document.getElementById("DirectoryInput").focus();
     }
     else {
 
-        fs.rename(array[index], directoryPath + "\\" + newName, function (err) {
-
+        window.electronAPI.renameFile(array[index], nuevaRuta, function (err) {
+            console.log(err);
             if (err) {
                 alert("An error ocurred updating the file" + err.message);
                 document.getElementById("DirectoryInput").focus();
             }
             else {
-                array[index] = directoryPath + newName;
+                array[index] = window.electronAPI.path.join(directoryPath,newName);
                 document.getElementById("displayPDF").src = array[index];
                 message("Successfully renamed!", 1500);
             }
             PrepareRename(false);
-        });
+            document.getElementById("displayPDF").src = array[index];
+            SetTitle( window.electronAPI.path.basename(array[index]));
+            });
     }
 }
 
@@ -123,12 +134,11 @@ function message(texto, Timeout) {
     }, Timeout)
 }
 function Borrar(filepath) {
-    var fs = require('fs');
 
     if (confirm("Are you sure you want to delete this PDF?")) {
 
-        if (fs.existsSync(filepath)) {
-            fs.unlink(filepath, (err) => {
+        if (window.electronAPI.fileExists(filepath)) {
+            window.electronAPI.unlinkFile(filepath, (err) => {
                 if (err) {
                     alert("An error ocurred updating the file" + err.message);
                     return;
@@ -146,7 +156,6 @@ function Borrar(filepath) {
     };
 }
 function CargarSiguiente() {
-    var fs = require('fs');
     if (index < array.length - 1) {
         index = index + 1;
     }
@@ -154,20 +163,40 @@ function CargarSiguiente() {
         index = 0;
     }
 
-    if (!fs.existsSync(array[index])) {
+    if (!window.electronAPI.fileExists(array[index]) && array.length>0) {
         array.splice(index, 1);
         CargarSiguiente();
     }
 
-    if (array.length != 1) {
+
+    if (array.length > 1) {
         document.getElementById("displayPDF").src = array[index];
-        var filename = array[index].split("\\");
-        SetTitle(filename[filename.length -1]);
+        SetTitle(window.electronAPI.path.basename(array[index]));
+    }
+    else if (array.length == 0) {
+        document.getElementById("displayPDF").src = "";
+        SetTitle("");
     }
 }
 
+function MoveFile() {
+    // Asegúrate de que array[index] contenga una ruta de archivo válida
+    var archivo = window.electronAPI.path.basename(array[index]);
+
+    // Invocamos el diálogo de guardar y manejamos la promesa
+    window.electronAPI.saveDialog(archivo).then((filePath) => {
+        if (filePath) {
+            console.log('Archivo guardado en:', filePath);
+        } else {
+            console.log('Guardado cancelado');
+        }
+    }).catch((error) => {
+        console.error('Error al guardar el archivo:', error);
+    });
+}
+
 function CargarAnterior() {
-    var fs = require('fs');
+
     if (index > 0) {
         index = index - 1;
     }
@@ -175,27 +204,30 @@ function CargarAnterior() {
         index = array.length - 1;
     }
 
-    if (!fs.existsSync(array[index])) {
+    if (!window.electronAPI.fileExists(array[index]) && array.length>0) {
         array.splice(index, 1);
         CargarAnterior();
     }
-    if (array.length != 1){
+    if (array.length > 1){
         document.getElementById("displayPDF").src = array[index];
-        var filename = array[index].split("\\");
-        SetTitle(filename[filename.length -1]);
+        SetTitle(window.electronAPI.path.basename(array[index]));
     }
 
+    else if (array.length == 0) {
+        document.getElementById("displayPDF").src = "";
+        SetTitle("");
+    }
 
+    
 
 }
 
-
-const { ipcRenderer } = require('electron');
-ipcRenderer.on('LeerArchivos', (event, arg, ind) => {
+window.electronAPI.onLeerArchivos((arg, ind) => {
     array = arg;
     index = ind;
     document.getElementById("displayPDF").src = array[index];
-    var filename = array[index].split("\\");
-    SetTitle(filename[filename.length -1]);
+    SetTitle(window.electronAPI.path.dirname(array[index]));
+
 });
-ipcRenderer.send('LeerArchivos', null);
+
+window.electronAPI.leerArchivos();

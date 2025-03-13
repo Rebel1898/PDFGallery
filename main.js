@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow,dialog } = require('electron')
 const path = require('path')
+let mainWindow;
 app.sharedObject = { prop1: process.argv }
 
 const { ipcMain } = require('electron');
@@ -26,20 +27,21 @@ ipcMain.on("LeerArchivos", (event, arg) => {
 
 
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+     mainWindow = new BrowserWindow({
     width: 1024,
     height: 600,
     icon: __dirname + '/PDF_icon4.png',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: false,
-      nodeIntegration: true,
+      contextIsolation: true,
+      nodeIntegration: false,
       nodeIntegrationInWorker: true,
       enableRemoteModule: true
     }
   })
   mainWindow.loadFile('index.html')
   mainWindow.maximize();
+  // mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {
@@ -52,3 +54,12 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
+
+ipcMain.handle('save-dialog', async (event,PDFbasename) => {
+      const result = await dialog.showSaveDialog(mainWindow, {
+        title: 'Guardar archivo',
+        defaultPath: PDFbasename ,
+        filters: [{ name: 'PDF', extensions: ['pdf'] }]
+     });
+     return result.filePath;
+});
