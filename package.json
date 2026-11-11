@@ -1,6 +1,6 @@
 {
   "name": "pdf-gallery",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "pdf-gallery",
   "main": "main.js",
   "scripts": {
@@ -19,9 +19,8 @@
   "author": "Rebel1898",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^35.0.1",
-    "electron-builder": "^25.1.8",
-    "electron-packager": "^17.1.2"
+    "electron": "^45.3.0",
+    "electron-builder": "^26.18.0"
   },
   "dependencies": {
     "electron-prompt": "^1.7.0",
@@ -55,20 +54,20 @@
       "target": [
         "nsis"
       ],
-      "icon": "icon.ico"
+      "icon": "icons/logo_1026.ico"
     },
     "mac": {
       "target": [
         "dmg"
       ],
-      "icon": "icon.icns"
+      "icon": "icons/logo_1026.ico"
     },
     "linux": {
       "target": [
         "AppImage",
         "deb"
       ],
-      "icon": "icon.png"
+      "icon": "icons/logo_1026.ico"
     }
   }
 }

@@ -25,6 +25,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     fileExists: (filePath) => fs.existsSync(filePath),
     leerArchivos: () => ipcRenderer.send('LeerArchivos'),
     onLeerArchivos: (callback) => ipcRenderer.on('LeerArchivos', (event, arg, ind) => callback(arg, ind)),
+        setcurrentDir: () => ipcRenderer.invoke("setcurrentDir",(event)),
+    
     unlinkFile: (filePath, callback) => {
       fs.unlink(filePath, (err) => {
           callback(err);

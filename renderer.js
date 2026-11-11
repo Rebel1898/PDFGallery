@@ -30,6 +30,10 @@ document.querySelector('#OK_ChangeName').addEventListener('click', () => {
     SetRename();
 
 })
+document.querySelector('#setcurrentDirectory').addEventListener('click', () => {
+    SetCurrentDirectory();
+
+})
 
 
 
@@ -220,6 +224,11 @@ function CargarAnterior() {
 
     
 
+}
+
+
+function SetCurrentDirectory(){
+    window.electronAPI.setcurrentDir();
 }
 
 window.electronAPI.onLeerArchivos((arg, ind) => {
